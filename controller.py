@@ -79,6 +79,33 @@ class RegisterController (Register):
             login = LoginController(parent=self)
             login.Show()
 
+class PembeliController (Pembeli):
+    def __init__(self, parent):
+        Pembeli.__init__(self,parent)
+        self.SetTitle ('MiApp')
+        self.tabel_listapk_pembeli.SetColLabelValue(0, "Kode Aplikasi")
+        self.tabel_listapk_pembeli.SetColLabelValue(1, "Nama Aplikasi")
+        self.tabel_listapk_pembeli.SetColLabelValue(2, "Durasi")
+        self.tabel_listapk_pembeli.SetColLabelValue(3, "Harga")
+        self.data()
+        self.tabel_akun.SetColLabelValue(0, "Username")
+        self.tabel_akun.SetColLabelValue(1, "Nama")
+        self.tabel_akun.SetColLabelValue(2, "Password")
+        self.akun()
+
+    def data(self):
+        con = sqlite3.connect("MiApp.db")
+        cursor = con.cursor()
+        data = cursor.execute("select * from produk").fetchall()
+        for a in data:
+            self.tabel_listapk_pembeli.AppendRows(1)
+        for b in range (4):
+            a = 0
+            for row in data:
+                self.tabel_listapk_pembeli.SetCellValue(a, b, str(row[b]))
+                a = a + 1
+        con.close()
+
 class PenjualController (Penjual):
     def __init__(self, parent):
         Penjual.__init__(self,parent)
