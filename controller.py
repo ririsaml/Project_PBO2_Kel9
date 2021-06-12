@@ -6,6 +6,7 @@ from MiApp import Pembeli
 from MiApp import Penjual
 from MiApp import Tambah
 from MiApp import Edit
+from MiApp import Delete
 
 class LoginController (Login):
     def __init__(self, parent):
@@ -304,6 +305,27 @@ class EditController (Edit):
             self.inp_apkPenjual.SetValue("")
             self.inp_durasi.SetValue("")
             self.inp_harga.SetValue("")
+
+class DeleteController (Delete):
+    def __init__(self, parent):
+        Delete.__init__(self,parent)
+        self.SetTitle ('MiApp')
+
+    def btn_delete_onclick( self, event ):
+        kode_aplikasi = self.inp_apkPenjual.GetValue()
+        con = sqlite3.connect('MiApp.db')
+        cursor = con.cursor()
+        query = "DELETE FROM produk where id_produk = ?"
+        cursor.execute(query,(kode_aplikasi,))
+        con.commit()
+        con.close()
+        if kode_aplikasi != "":
+             wx.MessageBox('Data produk berhasil dihapus!')
+        else :
+             wx.MessageBox('Data produk gagal dihapus!')
+        penjual = PenjualController(parent=self)
+        penjual.Show()
+        self.inp_apkPenjual.SetValue("")
 
 app = wx.App()
 run = LoginController(parent=None)
