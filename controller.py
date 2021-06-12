@@ -211,6 +211,10 @@ class PenjualController (Penjual):
                 a = a + 1
         con.close()
 
+    def btn_logout_onclick( self, event ):
+        login = LoginController(parent=self)
+        login.Show()
+
 app = wx.App()
 run = LoginController(parent=None)
 run.Show()
