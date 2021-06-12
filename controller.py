@@ -158,6 +158,10 @@ class PembeliController (Pembeli):
                 self.tabel_akun.SetCellValue(a, b, str(row[b]))
                 a = a + 1
         con.close()
+    
+    def btn_logout_onclick( self, event ):
+        login = LoginController(parent=self)
+        login.Show()
 
 class PenjualController (Penjual):
     def __init__(self, parent):
