@@ -184,6 +184,19 @@ class PenjualController (Penjual):
     def btn_delete1_onclick( self, event ):
         delete = DeleteController(parent=self)
         delete.Show()
+    
+    def riwayat(self):
+        con = sqlite3.connect("MiApp.db")
+        cursor = con.cursor()
+        data = cursor.execute("select * from pemesanan").fetchall()
+        for a in data:
+            self.tabel_riwayat.AppendRows(1)
+        for b in range (4):
+            a = 0
+            for row in data:
+                self.tabel_riwayat.SetCellValue(a, b, str(row[b]))
+                a = a + 1
+        con.close()
 
 app = wx.App()
 run = LoginController(parent=None)
