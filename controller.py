@@ -260,6 +260,50 @@ class TambahController (Tambah):
             self.inp_durasi.SetValue("")
             self.inp_harga.SetValue("")
 
+class EditController (Edit):
+    def __init__(self, parent):
+        Edit.__init__(self,parent)
+        self.SetTitle ('MiApp')
+
+    def btn_simpan_onclick( self, event ):
+        kode_apk = self.inp_kodeApk.GetValue()
+        nama_apk = self.inp_apkPenjual.GetValue()
+        durasi = self.inp_durasi.GetValue()
+        harga = self.inp_harga.GetValue()
+        if kode_apk == "":
+            wx.MessageBox('Masukkan kode aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif nama_apk == "":
+            wx.MessageBox('Masukkan nama aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif durasi == "":
+            wx.MessageBox('Masukkan durasi pemakaian aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif harga == "":
+            wx.MessageBox('Masukkan harga terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        else :
+            con = sqlite3.connect("MiApp.db")
+            cursor = con.cursor()
+            cursor.execute(
+            """CREATE TABLE IF NOT EXISTS produk (
+                "id_produk" INT NOT NULL,
+                "nama_app" INT NOT NULL,
+                "durasi" TEXT NOT NULL,
+                "harga" TEXT NOT NULL,
+                PRIMARY KEY("id_produk" AUTOINCREMENT)
+            )"""
+            )
+            con.commit()
+            data = "UPDATE produk SET nama_app = ?, durasi = ?, harga = ? where id_produk=?"
+            fill = (nama_apk, durasi, harga, kode_apk)
+            cursor.execute(data,fill)
+            con.commit()
+            con.close()
+            wx.MessageBox('Data produk berhasil ditambahkan!')
+            penjual = PenjualController(parent=self)
+            penjual.Show()
+            self.inp_kodeApk.SetValue("")
+            self.inp_apkPenjual.SetValue("")
+            self.inp_durasi.SetValue("")
+            self.inp_harga.SetValue("")
+
 app = wx.App()
 run = LoginController(parent=None)
 run.Show()
