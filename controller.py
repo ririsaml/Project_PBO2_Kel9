@@ -5,6 +5,7 @@ from MiApp import Register
 from MiApp import Pembeli
 from MiApp import Penjual
 from MiApp import Tambah
+from MiApp import Edit
 
 class LoginController (Login):
     def __init__(self, parent):
