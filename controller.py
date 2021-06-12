@@ -114,7 +114,6 @@ class PembeliController (Pembeli):
         nama_apk = self.inp_apkPembeli.GetValue()
         jumlah = int(self.inp_jml.GetValue())
         username = run.inp_usn.GetValue()
-        wx.MessageBox(username)
         if nama_apk == "":
             wx.MessageBox('Masukkan nama aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
         elif jumlah == "":
