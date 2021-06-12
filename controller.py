@@ -4,6 +4,7 @@ from MiApp import Login
 from MiApp import Register
 from MiApp import Pembeli
 from MiApp import Penjual
+from MiApp import Tambah
 
 class LoginController (Login):
     def __init__(self, parent):
@@ -219,6 +220,45 @@ class PenjualController (Penjual):
     def btn_logout_onclick( self, event ):
         login = LoginController(parent=self)
         login.Show()
+
+class TambahController (Tambah):
+    def __init__(self, parent):
+        Tambah.__init__(self,parent)
+        self.SetTitle ('MiApp')
+
+    def btn_tambah_onclick( self, event ):
+        nama_apk = self.inp_apkPenjual.GetValue()
+        durasi = self.inp_durasi.GetValue()
+        harga = self.inp_harga.GetValue()
+        if nama_apk == "":
+            wx.MessageBox('Masukkan nama aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif durasi == "":
+            wx.MessageBox('Masukkan durasi pemakaian aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif harga == "":
+            wx.MessageBox('Masukkan harga terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        else :
+            con = sqlite3.connect("MiApp.db")
+            cursor = con.cursor()
+            cursor.execute(
+            """CREATE TABLE IF NOT EXISTS produk (
+                "id_produk" INTEGER,
+                "nama_app" INT NOT NULL,
+                "durasi" TEXT NOT NULL,
+                "harga" TEXT NOT NULL,
+                PRIMARY KEY("id_produk" AUTOINCREMENT)
+                FOREIGN KEY("username") REFERENCES "user"("username")
+            )"""
+            )
+            con.commit()
+            cursor.execute("INSERT INTO produk VALUES (NULL,?,?,?)", (nama_apk, durasi, harga))
+            con.commit()
+            con.close()
+            wx.MessageBox('Data produk berhasil ditambahkan!')
+            penjual = PenjualController(parent=self)
+            penjual.Show()
+            self.inp_apkPenjual.SetValue("")
+            self.inp_durasi.SetValue("")
+            self.inp_harga.SetValue("")
 
 app = wx.App()
 run = LoginController(parent=None)
