@@ -2,6 +2,7 @@ import wx
 import sqlite3
 from MiApp import Login
 from MiApp import Register
+from MiApp import Penjual
 
 class LoginController (Login):
     def __init__(self, parent):
@@ -77,6 +78,46 @@ class RegisterController (Register):
             wx.MessageBox('Registrasi Berhasil!')
             login = LoginController(parent=self)
             login.Show()
+
+class PenjualController (Penjual):
+    def __init__(self, parent):
+        Penjual.__init__(self,parent)
+        self.SetTitle ('MiApp')
+        self.tabel_listapk_penjual.SetColLabelValue(0, "Kode Aplikasi")
+        self.tabel_listapk_penjual.SetColLabelValue(1, "Nama Aplikasi")
+        self.tabel_listapk_penjual.SetColLabelValue(2, "Durasi")
+        self.tabel_listapk_penjual.SetColLabelValue(3, "Harga")
+        self.data()
+        self.tabel_riwayat.SetColLabelValue(0, "Kode Order")
+        self.tabel_riwayat.SetColLabelValue(1, "Nama Aplikasi")
+        self.tabel_riwayat.SetColLabelValue(2, "Jumlah")
+        self.tabel_riwayat.SetColLabelValue(3, "Username")
+        self.riwayat()
+
+    def data(self):
+        con = sqlite3.connect("MiApp.db")
+        cursor = con.cursor()
+        data = cursor.execute("select * from produk").fetchall()
+        for a in data:
+            self.tabel_listapk_penjual.AppendRows(1)
+        for b in range (4):
+            a = 0
+            for row in data:
+                self.tabel_listapk_penjual.SetCellValue(a, b, str(row[b]))
+                a = a + 1
+        con.close()
+    
+    def btn_tambah_onclick( self, event ):
+        tambah = TambahController(parent=self)
+        tambah.Show()
+
+    def btn_edit1_onclick( self, event ):
+        edit = EditController(parent=self)
+        edit.Show()
+    
+    def btn_delete1_onclick( self, event ):
+        delete = DeleteController(parent=self)
+        delete.Show()
 
 app = wx.App()
 run = LoginController(parent=None)
