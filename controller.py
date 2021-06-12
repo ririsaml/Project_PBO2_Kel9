@@ -106,6 +106,45 @@ class PembeliController (Pembeli):
                 a = a + 1
         con.close()
 
+    def btn_pesan_onclick( self, event ):
+        nama_apk = self.inp_apkPembeli.GetValue()
+        jumlah = int(self.inp_jml.GetValue())
+        username = run.inp_usn.GetValue()
+        wx.MessageBox(username)
+        if nama_apk == "":
+            wx.MessageBox('Masukkan nama aplikasi terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        elif jumlah == "":
+            wx.MessageBox('Masukkan jumlah pemesanan terlebih dahulu','Warning',wx.OK | wx.ICON_WARNING)
+        else :
+            con = sqlite3.connect("MiApp.db")
+            cursor = con.cursor()
+            cursor.execute(
+            """CREATE TABLE IF NOT EXISTS pemesanan (
+                "id_order" INTEGER NOT NULL,
+                "nama_apk" INT NOT NULL,
+                "jumlah" TEXT NOT NULL,
+                "username" TEXT NOT NULL,
+                PRIMARY KEY("id_order" AUTOINCREMENT),
+                FOREIGN KEY("username")REFERENCES user("username")
+            )"""
+            )
+            cursor.execute("INSERT INTO pemesanan VALUES (NULL,?,?,?)", (nama_apk, jumlah, username))
+            cursor.execute("SELECT harga FROM produk WHERE nama_app=?", (nama_apk,))
+            con.commit()
+            harga_perunit = cursor.fetchone()
+            if (harga_perunit):
+                harga = int(harga_perunit[0])
+                total_pemesanan = jumlah * harga
+                wx.MessageBox(f'Total pemesanan Anda senilai {total_pemesanan}')
+                self.inp_apkPembeli.SetValue("")
+                self.inp_jml.SetValue("")
+            else:
+                wx.MessageBox('Aplikasi tidak terdaftar, lakukan pemesanan ulang','Warning',wx.OK | wx.ICON_WARNING)
+                self.inp_apkPembeli.SetValue("")
+                self.inp_jml.SetValue("")
+                return harga_perunit
+            con.close()
+
 class PenjualController (Penjual):
     def __init__(self, parent):
         Penjual.__init__(self,parent)
