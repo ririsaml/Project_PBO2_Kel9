@@ -2,6 +2,7 @@ import wx
 import sqlite3
 from MiApp import Login
 from MiApp import Register
+from MiApp import Pembeli
 from MiApp import Penjual
 
 class LoginController (Login):
