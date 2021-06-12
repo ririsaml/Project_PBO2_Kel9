@@ -145,6 +145,19 @@ class PembeliController (Pembeli):
                 return harga_perunit
             con.close()
 
+    def akun(self):
+        username = run.inp_usn.GetValue()
+        con = sqlite3.connect("MiApp.db")
+        data1 = con.cursor().execute("SELECT * FROM user where username=?", (username,)).fetchall()
+        for a in data1:
+            self.tabel_akun.AppendRows(1)
+        for b in range (3):
+            a = 0
+            for row in data1:
+                self.tabel_akun.SetCellValue(a, b, str(row[b]))
+                a = a + 1
+        con.close()
+
 class PenjualController (Penjual):
     def __init__(self, parent):
         Penjual.__init__(self,parent)
